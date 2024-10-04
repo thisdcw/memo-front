@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: "https://back.thisdcw.fun",
+        target: "https://thisdcw.cn",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

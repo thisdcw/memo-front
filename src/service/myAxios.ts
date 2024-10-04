@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 
 const myAxios: AxiosInstance = axios.create({
-    baseURL: 'http://back.thisdcw.fun/api'
+    baseURL: 'https://thisdcw.cn/api'
 } as CreateAxiosDefaults);
 
 myAxios.defaults.withCredentials = true;
