@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="common-layout">
@@ -12,7 +11,7 @@
           <cs-header />
         </el-header>
         <el-main>
-          <el-watermark :font="111">
+          <el-watermark :content="['thisdcw']">
             <div style="height: 800px; width: 100px">
               <router-view></router-view>
             </div>
@@ -26,6 +25,4 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

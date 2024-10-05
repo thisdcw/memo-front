@@ -13,9 +13,6 @@
         alt="Element logo"
       />
     </el-menu-item>
-    <el-menu-item index="1">
-      <span> 切换语言 </span>
-    </el-menu-item>
     <el-sub-menu index="2">
       <template #title>操作</template>
       <el-menu-item index="2-1">注销登录</el-menu-item>

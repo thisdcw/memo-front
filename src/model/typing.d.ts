@@ -22,5 +22,16 @@ declare namespace Model {
         role_id: number,
         account: string,
         token: string
+    };
+    type Device = {
+        id: number,
+        device_id: string,
+        device_name: string,
+        create_at: Date,
+        last_upload: Date,
+        device_status: number,
+        remark?: string,
+        mode?: number,
+        isLocked: number
     }
 }

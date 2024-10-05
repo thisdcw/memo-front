@@ -9,11 +9,11 @@
       <el-sub-menu index="1">
         <template #title>
           <el-icon><location /></el-icon>
-          <span @click="getCurrent">管理模块</span>
+          <span>管理模块</span>
         </template>
         <el-menu-item-group>
           <el-menu-item route="/111" index="1-1">用户管理</el-menu-item>
-          <el-menu-item index="1-2">设备管理</el-menu-item>
+          <el-menu-item index="/device">设备管理</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
       <el-menu-item index="2">
@@ -29,13 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentUser } from './../../api/user';
 
-const getCurrent = async () => {
-  await getCurrentUser().then((res: any) => {
-    console.log(res);
-  });
-};
 </script>
 
 <style>
