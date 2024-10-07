@@ -123,12 +123,49 @@
         background
         layout="prev, pager, next"
         :total="total"
+        :current-page="cur"
+        :page-size="size"
         @prev-click="prev"
         @next-click="next"
-        @change="pageChange"
+        @size-change="pageChange"
+        @current-change="pageChange"
       />
     </div>
   </div>
+  <el-dialog
+    v-model="showLockDialog"
+    title="提示"
+    width="500"
+    draggable
+    overflow
+  >
+    <span>确定锁定{{ lock }}吗 </span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showLockDialog = false">取消</el-button>
+        <el-button type="primary" @click="onLockConfirm(lock)">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog
+    v-model="showUnLockDialog"
+    title="提示"
+    width="500"
+    draggable
+    overflow
+  >
+    <span>确定解锁{{ unlock }}吗 </span>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showUnLockDialog = false">取消</el-button>
+        <el-button type="primary" @click="onUnLockConfirm(unlock)">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
@@ -140,10 +177,25 @@ onMounted(() => {
 
 const deviceList = ref<Model.Device[]>([]);
 const selectList = ref<Model.Device[]>([]);
-let cur = 1;
-let size = 10;
+const cur = ref(1);
+const size = ref(10);
 const total = ref(0);
 const search = ref('');
+const lock = ref('');
+const showLockDialog = ref(false);
+const unlock = ref('');
+const showUnLockDialog = ref(false);
+
+const onLockConfirm = (deviceId: string) => {
+  showLockDialog.value = false;
+  console.log('锁定设备：', deviceId);
+};
+
+const onUnLockConfirm = (deviceId: string) => {
+  showUnLockDialog.value = false;
+  console.log('解锁设备：', deviceId);
+};
+
 const searchDevice = () => {
   console.log('搜索设备：', search.value);
 };
@@ -151,7 +203,7 @@ const addDevice = () => {
   console.log('添加设备');
 };
 const getDeviceList = () => {
-  getAllDevice(cur, size)
+  getAllDevice(cur.value, size.value)
     .then((res) => {
       console.log(res.records);
       deviceList.value = res.records;
@@ -172,29 +224,28 @@ const batchUnLock = () => {
 };
 const prev = (page: number) => {
   console.log('当前页码：', page);
-  cur = page;
-  getDeviceList();
+  cur.value = page - 1;
 };
 const next = (page: number) => {
   console.log('页码：', page);
-  cur = page;
-  getDeviceList();
+  cur.value = page + 1;
 };
 
 const pageChange = (currentPage: number, pageSize: number) => {
   console.log('当前页码：', currentPage);
   console.log('每页显示条数：', pageSize);
-  cur = currentPage;
-  size = pageSize;
+  cur.value = currentPage;
   getDeviceList();
 };
 
 const lockDevice = (deviceId: string) => {
-  console.log('锁定设备: ', deviceId);
+  lock.value = deviceId;
+  showLockDialog.value = true;
 };
 
 const unlockDevice = (deviceId: string) => {
-  console.log('解锁设备: ', deviceId);
+  unlock.value = deviceId;
+  showUnLockDialog.value = true;
 };
 
 function formatDate(isoDate: Date) {
