@@ -1,28 +1,33 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
   <div class="common-layout">
-    <el-container style="width: 100%; height: 100vh">
-      <el-aside width="200px">
-        <cs-aside />
+    <el-container>
+      <!--侧边栏-->
+      <el-aside style="width: calc(14vw - 2rem)">
+        <cs-aside/>
       </el-aside>
+      <!--主要内容-->
       <el-container>
         <el-header>
-          <cs-header />
+          <cs-header/>
         </el-header>
         <el-main>
           <el-watermark :content="['thisdcw']">
-            <div style="height: 800px; width: 100px">
-              <router-view></router-view>
-            </div>
+            <app-main/>
           </el-watermark>
         </el-main>
         <el-footer>
-          <cs-footer />
+          <cs-footer/>
         </el-footer>
       </el-container>
     </el-container>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.common-layout {
+  padding: 2rem;
+}
+</style>

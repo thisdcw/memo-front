@@ -1,8 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
-  <div>
-    <basic-layout />
+  <div style="width: 100vw;height: 100vh;">
+    <router-view/>
+    <!--    <basic-layout />-->
   </div>
 </template>
 

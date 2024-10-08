@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 80vw">
+  <div style="width: 100%">
     <div style="display: flex; justify-content: space-between">
       <div>
         <el-button type="primary" @click="addDevice">新增设备</el-button>
