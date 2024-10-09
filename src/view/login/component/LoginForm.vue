@@ -3,7 +3,7 @@ import {reactive, ref} from "vue";
 import {CircleClose, Lock, User, UserFilled} from "@element-plus/icons-vue";
 import {ElForm} from "element-plus";
 import {useRoute, useRouter} from 'vue-router';
-import {setToken} from '@/utils/token.ts';
+import {setToken} from '@/utils/token';
 
 const router = useRouter();
 const route = useRoute();

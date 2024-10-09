@@ -173,7 +173,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { getAllDevice } from '../../api/device';
-import {formatDate} from "../../utils/date.ts";
+import {formatDate} from "../../utils/date";
 import {CirclePlus, Lock, Search, Unlock} from "@element-plus/icons-vue";
 
 onMounted(() => {

@@ -1,6 +1,6 @@
 import {Router} from "vue-router";
-import {getToken} from "../utils/token.ts";
-import NProgress from "../plugins/NProgress.ts";
+import {getToken} from "../utils/token";
+import NProgress from "../plugins/NProgress";
 
 
 const whiteList = ['/login', '/register']
