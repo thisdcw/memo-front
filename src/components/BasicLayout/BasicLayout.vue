@@ -10,15 +10,15 @@
       </el-aside>
       <!--主要内容-->
       <el-container>
-        <el-header>
+        <el-header style="width: calc(86vw - 2rem)">
           <cs-header/>
         </el-header>
-        <el-main>
-          <el-watermark :content="['thisdcw']">
-            <app-main/>
+        <el-main style="background-color: #EFF0F2; margin: 0; padding: 8px; flex: 1; display: flex; flex-direction: column;">
+          <el-watermark :content="['']" style="flex: 1; display: flex;">
+            <app-main style="flex: 1; display: flex;"></app-main>
           </el-watermark>
         </el-main>
-        <el-footer>
+        <el-footer style="height: 31px">
           <cs-footer/>
         </el-footer>
       </el-container>
@@ -27,7 +27,4 @@
 </template>
 
 <style lang="scss" scoped>
-.common-layout {
-  padding: 2rem;
-}
 </style>

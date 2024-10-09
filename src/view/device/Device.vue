@@ -1,8 +1,8 @@
 <template>
-  <div style="width: 100%">
-    <div style="display: flex; justify-content: space-between">
-      <div>
-        <el-button type="primary" @click="addDevice">新增设备</el-button>
+  <div style="">
+    <div style="display: flex; justify-content: space-between;margin-top: 40px">
+      <div style="">
+        <el-button type="primary" @click="addDevice" :icon="CirclePlus">新增设备</el-button>
         <el-input
           v-model="search"
           style="width: 240px; margin-left: 20px"
@@ -12,14 +12,15 @@
           type="primary"
           style="margin-left: 10px"
           @click="searchDevice"
+          :icon="Search"
           >搜索</el-button
         >
       </div>
       <div>
-        <el-button type="success" @click="batchUnLock">{{
+        <el-button type="success" @click="batchUnLock" :icon="Unlock">{{
           selectList.length !== 0 ? '解锁选中设备' : '解锁所有设备'
         }}</el-button>
-        <el-button type="danger" @click="batchLock">{{
+        <el-button type="danger" @click="batchLock" :icon="Lock">{{
           selectList.length !== 0 ? '锁定选中设备' : '锁定所有设备'
         }}</el-button>
       </div>
@@ -27,8 +28,10 @@
     <el-table
       :data="deviceList"
       table-layout="fixed"
+      border
+      height="900"
       @selection-change="handleSelectionChange"
-      style="width: 100%; margin-top: 20px"
+      style="width: 100%; margin-top: 40px"
     >
       <el-table-column type="selection" width="55" />
       <el-table-column fixed prop="device_id" label="设备Id" align="center" />
@@ -170,6 +173,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { getAllDevice } from '../../api/device';
+import {formatDate} from "../../utils/date.ts";
+import {CirclePlus, Lock, Search, Unlock} from "@element-plus/icons-vue";
 
 onMounted(() => {
   getDeviceList();
@@ -248,18 +253,7 @@ const unlockDevice = (deviceId: string) => {
   showUnLockDialog.value = true;
 };
 
-function formatDate(isoDate: Date) {
-  const date = new Date(isoDate);
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
 </script>
 
 <style scoped></style>

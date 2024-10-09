@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import Device from '@/view/device/Device.vue';
 import NotFound from '@/view/NotFound/NotFound.vue'
 import Login from '@/view/login/index.vue';
@@ -6,6 +6,7 @@ import User from '@/view/user/index.vue';
 import Profile from '@/view/profile/index.vue';
 import Other from '@/view/other/index.vue';
 import Dashboard from '@/view/dashboard/index.vue';
+import Welcome from '@/view/welcome/index.vue';
 import BasicLayout from "../components/BasicLayout/BasicLayout.vue";
 import {setupRouterGuard} from './guard'
 
@@ -13,6 +14,7 @@ const routes = [
     {
         path: '/', component: BasicLayout, redirect: '/dashboard',
         children: [
+            {path: '/welcome', component: Welcome},
             {path: '/dashboard', component: Dashboard},
             {path: '/user', component: User},
             {path: '/device', component: Device},
@@ -25,7 +27,7 @@ const routes = [
 ] as any[];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 })
 

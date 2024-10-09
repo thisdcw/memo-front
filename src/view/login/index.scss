@@ -1,10 +1,13 @@
 .login-container {
-  height: 100%;
+  height: 100vh;
   min-height: 550px;
   background-color: #eeeeee;
-  background-image: url("@/assest/images/login_bg.svg");
-  background-size: 100% 100%;
+  background-image: url("@/assets/images/login_bg.svg");
+  background-size: 100vh 100vh;
   background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .login-box {
     position: relative;
