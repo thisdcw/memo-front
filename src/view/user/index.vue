@@ -35,22 +35,16 @@ const tableData = getUserList();
 </script>
 
 <template>
-  <div style="width: 100%">
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin: 40px 0;
-      "
-    >
-      <div style="">
+  <div class="container">
+    <div class="top-bar">
+      <div class="left-buttons">
         <el-button type="primary" :icon="CirclePlus">新增设备</el-button>
         <el-input
-          style="width: 440px; margin-left: 20px"
-          placeholder="请输入你要搜索的用户账户或用户名"
+            style="margin-left: 20px"
+            class="search-input"
+            placeholder="请输入你要搜索的用户账户或用户名"
         />
-        <el-button type="primary" style="margin-left: 10px" :icon="Search">
+        <el-button type="primary" class="search-button" :icon="Search">
           搜索
         </el-button>
       </div>
@@ -60,46 +54,46 @@ const tableData = getUserList();
     </div>
     <div style="width: 100%">
       <el-table
-        :data="tableData"
-        style="width: 100%; overflow: hidden"
-        height="900"
-        border
+          :data="tableData"
+          class="table"
+          height="70vh"
+          border
       >
         <el-table-column fixed type="selection" width="55" />
         <el-table-column
-          fixed
-          prop="avatar"
-          align="center"
-          label="头像"
-          width="100"
+            fixed
+            prop="avatar"
+            align="center"
+            label="头像"
+            width="100"
         >
           <template #default="scope">
             <el-image
-              style="width: 60px; height: 60px"
-              :src="url"
-              fit="cover"
+                style="width: 60px; height: 60px"
+                :src="scope.row.avatar"
+                fit="cover"
             />
           </template>
         </el-table-column>
         <el-table-column
-          fixed
-          prop="account"
-          align="center"
-          label="账号"
-          width="100"
+            fixed
+            prop="account"
+            align="center"
+            label="账号"
+            width="100"
         />
         <el-table-column
-          prop="username"
-          align="center"
-          label="用户名"
-          width="120"
+            prop="username"
+            align="center"
+            label="用户名"
+            width="120"
         />
         <el-table-column prop="email" align="center" label="邮箱" width="220" />
         <el-table-column
-          prop="create_at"
-          align="center"
-          label="创建时间"
-          width="200"
+            prop="create_at"
+            align="center"
+            label="创建时间"
+            width="200"
         >
           <template #default="scope">
             <span>{{ formatDate(scope.row.create_at) }}</span>
@@ -111,10 +105,10 @@ const tableData = getUserList();
           </template>
         </el-table-column>
         <el-table-column
-          fixed="right"
-          align="center"
-          label="操作"
-          min-width="120"
+            fixed="right"
+            align="center"
+            label="操作"
+            min-width="120"
         >
           <template #default>
             <el-button link type="primary" size="small" @click="handleClick">
@@ -125,20 +119,91 @@ const tableData = getUserList();
         </el-table-column>
       </el-table>
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 20px">
+    <div class="pagination">
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :current-page="cur"
-        :page-size="size"
-        @prev-click="prev"
-        @next-click="next"
-        @size-change="pageChange"
-        @current-change="pageChange"
+          background
+          layout="prev, pager, next"
+          :total="total"
+          :current-page="cur"
+          :page-size="size"
+          @prev-click="prev"
+          @next-click="next"
+          @size-change="pageChange"
+          @current-change="pageChange"
       />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 1%;
+  height: 98%;
+  width: 98%;
+}
+
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.left-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  min-width: 250px;
+  flex-grow: 1;
+}
+
+.table {
+  width: 100%;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.search-button {
+  margin-left: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .left-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .search-input {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .search-button {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 100%;
+  }
+
+  .pagination {
+    justify-content: center;
+    width: 100%;
+  }
+}
+</style>
+

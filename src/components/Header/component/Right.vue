@@ -2,6 +2,7 @@
 import {SwitchButton,} from "@element-plus/icons-vue";
 import {removeToken} from "@/utils/token";
 import {useRouter} from "vue-router";
+import FullScreen from "@/components/Header/component/FullScreen.vue";
 
 const router = useRouter(); // 获取路由实例
 const logout = () => {
@@ -12,6 +13,9 @@ const logout = () => {
 
 <template>
   <div style="flex: 1;display: flex;justify-content: flex-end;align-items: center">
+    <div style="display: flex;margin-right: 20px">
+      <FullScreen/>
+    </div>
     <span class="username">admin</span>
     <el-dropdown trigger="click">
       <div class="avatar">

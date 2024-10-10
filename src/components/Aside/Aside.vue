@@ -98,7 +98,24 @@ watch(
 }
 
 :deep(.el-menu-item:hover) {
-  background-color: #78b6f6 !important; // 鼠标悬浮背景色
+  background-color: #c2ddfa !important; // 鼠标悬浮背景色
   color: white;
 }
+:deep(.el-menu-item.is-active) {
+  background-color: #4ea1fa !important; // 激活背景色
+  color: #fff !important; // 激活字体颜色
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px; // 调整为你想要的宽度
+    background-color: #027bfb; // 设置长条的颜色
+    border-radius: 2px; // 可选，为长条加上圆角
+  }
+}
+
 </style>

@@ -16,7 +16,7 @@
   height: 100%;
 
   .home-bg {
-    width: 70%;
+    width: 100%;
     max-width: 1200px;
     margin-bottom: 20px;
   }

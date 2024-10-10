@@ -2,7 +2,7 @@
 
 <template>
   <div class="footer">
-    <span>2024 © memo-Admin By thisdcw Technology.</span>
+    <span>2024 © memo-admin By thisdcw Technology.</span>
   </div>
 </template>
 
