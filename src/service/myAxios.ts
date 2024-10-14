@@ -1,12 +1,12 @@
-import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
-import {userStore} from "../store";
+import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import { userStore } from "../store";
 
 const myAxios: AxiosInstance = axios.create({
     // baseURL: 'https://thisdcw.cn/api'
-    baseURL: 'http://127.0.0.1:8088/api'
+    baseURL: 'http://127.0.0.1:8088/api',
+    timeout: 10000,
+    withCredentials: true
 } as CreateAxiosDefaults);
-
-myAxios.defaults.withCredentials = true;
 
 // 添加请求拦截器
 myAxios.interceptors.request.use(function (config) {
@@ -15,8 +15,6 @@ myAxios.interceptors.request.use(function (config) {
     const token = store.getToken
     if (token) {
         config.headers['Token'] = token; // 设置 Authorization 头
-        console.log("发送请求... token: " + token);
-        console.log("请求头:", config.headers);
     }
     return config;
 }, function (error) {
@@ -27,11 +25,9 @@ myAxios.interceptors.request.use(function (config) {
 // 添加响应拦截器
 myAxios.interceptors.response.use(function (response) {
     // 对响应数据做点什么
-    console.log("响应成功...")
     return response.data;
 }, function (error) {
     // 对响应错误做点什么
-    console.log("响应失败...")
     return Promise.reject(error);
 });
 

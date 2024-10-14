@@ -348,7 +348,7 @@ const addDevice = () => {
 const getDeviceList = () => {
   DeviceService.getAllDevice(cur.value, size.value, search.value)
       .then((res) => {
-        console.log(res.records);
+        // console.log(res.records);
         deviceList.value = res.records;
         total.value = res.total;
       })

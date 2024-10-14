@@ -17,7 +17,6 @@ export function setupRouterGuard(router: Router) {
                 next()
             }
         } else {
-            console.log("没有token")
             if (whiteList.includes(to.path)) {
                 next()
             } else {
