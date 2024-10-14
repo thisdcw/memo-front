@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {SwitchButton,} from "@element-plus/icons-vue";
-import {removeToken} from "@/utils/token";
 import {useRouter} from "vue-router";
 import FullScreen from "@/components/Header/component/FullScreen.vue";
+import {userStore} from "@/store";
+
+const store = userStore();
 
 const router = useRouter(); // 获取路由实例
 const logout = () => {
-  removeToken()
+  store.clearUser();
   router.replace({path: '/login'});
 }
 </script>

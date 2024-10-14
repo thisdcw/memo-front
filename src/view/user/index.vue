@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { getUserList } from '@/mock/data/user';
-import { formatDate } from '@/utils/date';
-import { ref } from 'vue';
-import { CirclePlus, Delete, Plus, Search } from '@element-plus/icons-vue';
+import {formatDate} from '@/utils/date';
+import {onMounted, ref} from 'vue';
+import {Search} from '@element-plus/icons-vue';
+import {UserService} from "@/api/user";
+import {ElMessage} from "element-plus";
 
 const url =
-  'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
+    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
 
 const cur = ref(1);
 const size = ref(10);
 const total = ref(0);
+
+const search = ref('');
 
 const handleClick = () => {
   console.log('click');
@@ -24,76 +27,95 @@ const next = (page: number) => {
   cur.value = page + 1;
 };
 
+const sizeChange = (val: number) => {
+  console.log('每页显示条数：', val);
+  size.value = val;
+  fetchAllUsers();
+};
+
 const pageChange = (currentPage: number, pageSize: number) => {
   console.log('当前页码：', currentPage);
   console.log('每页显示条数：', pageSize);
   cur.value = currentPage;
-  getUserList();
+  fetchAllUsers();
 };
 
-const tableData = getUserList();
+const tableData = ref({} as Model.User[])
+
+const fetchAllUsers = () => {
+  UserService.getAllUser(cur.value, size.value, search.value).then((res) => {
+    console.log(res)
+    ElMessage.success('获取所有用户成功')
+  }).catch((err) => {
+    ElMessage.success('获取所有用户失败')
+  })
+}
+
+onMounted(() => {
+  fetchAllUsers();
+})
+
 </script>
 
 <template>
   <div class="container">
     <div class="top-bar">
       <div class="left-buttons">
-        <el-button type="primary" :icon="CirclePlus">新增设备</el-button>
+        <!--        <el-button type="primary" :icon="CirclePlus">新增用户</el-button>-->
         <el-input
-            style="margin-left: 20px"
             class="search-input"
             placeholder="请输入你要搜索的用户账户或用户名"
+            v-model="search"
         />
         <el-button type="primary" class="search-button" :icon="Search">
           搜索
         </el-button>
       </div>
       <div>
-        <el-button type="danger" :icon="Delete"> 删除选中用户 </el-button>
+        <!--        <el-button type="danger" :icon="Delete"> 删除选中用户</el-button>-->
       </div>
     </div>
-    <div style="width: 100%">
+    <div>
       <el-table
           :data="tableData"
           class="table"
-          height="70vh"
+          height="75vh"
+          table-layout="auto"
           border
       >
-        <el-table-column fixed type="selection" width="55" />
+        <el-table-column fixed type="selection"/>
+        <el-table-column
+            prop="account"
+            align="center"
+            label="账号"
+        />
         <el-table-column
             fixed
             prop="avatar"
             align="center"
             label="头像"
-            width="100"
         >
           <template #default="scope">
             <el-image
-                style="width: 60px; height: 60px"
-                :src="scope.row.avatar"
+                style="width: 40px; height: 40px"
+                :src="scope.row.avatar ?? url"
                 fit="cover"
+                @error="scope.row.avatar = url"
             />
+
           </template>
         </el-table-column>
-        <el-table-column
-            fixed
-            prop="account"
-            align="center"
-            label="账号"
-            width="100"
-        />
+
         <el-table-column
             prop="username"
             align="center"
             label="用户名"
-            width="120"
         />
-        <el-table-column prop="email" align="center" label="邮箱" width="220" />
+        <el-table-column prop="email" align="center" label="邮箱"/>
         <el-table-column
             prop="create_at"
             align="center"
             label="创建时间"
-            width="200"
         >
           <template #default="scope">
             <span>{{ formatDate(scope.row.create_at) }}</span>
@@ -122,13 +144,13 @@ const tableData = getUserList();
     <div class="pagination">
       <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           :current-page="cur"
           :page-size="size"
           @prev-click="prev"
           @next-click="next"
-          @size-change="pageChange"
+          @size-change="sizeChange"
           @current-change="pageChange"
       />
     </div>
@@ -149,7 +171,7 @@ const tableData = getUserList();
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 40px;
 }
 
 .left-buttons {
@@ -172,6 +194,7 @@ const tableData = getUserList();
   justify-content: flex-end;
   margin-top: 20px;
 }
+
 .search-button {
   margin-left: 20px;
   width: 100%;

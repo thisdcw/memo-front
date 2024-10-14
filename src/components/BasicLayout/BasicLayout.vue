@@ -1,4 +1,27 @@
 <script setup lang="ts">
+import {onMounted} from "vue";
+import {UserService} from "@/api/user";
+import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
+import {userStore} from "@/store";
+
+const router = useRouter();
+const store = userStore();
+
+const fetchUserInfo = () => {
+  UserService.getCurrentUser().then(data => {
+    store.setUser(data)
+    ElMessage.success('获取用户信息成功')
+  }).catch(err => {
+    ElMessage.error('获取用户失败,请重新登录')
+    store.clearUser()
+    router.replace('/login')
+  })
+}
+
+onMounted(() => {
+  fetchUserInfo()
+})
 </script>
 
 <template>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {reactive, ref} from "vue";
 import {CircleClose, Lock, User, UserFilled} from "@element-plus/icons-vue";
-import {ElForm} from "element-plus";
+import {ElForm, ElMessage} from "element-plus";
 import {useRoute, useRouter} from 'vue-router';
-import {setToken} from '@/utils/token';
+import {UserService} from "@/api/user";
+import {userStore} from "@/store";
 
 const router = useRouter();
 const route = useRoute();
@@ -13,26 +14,35 @@ type FormInstance = InstanceType<typeof ElForm>;
 const loading = ref(false);
 const loginFormRef = ref<FormInstance>();
 
+const store = userStore();
+
 
 const loginRules = reactive({
   username: [{required: true, message: "请输入用户名", trigger: "blur"}],
   password: [{required: true, message: "请输入密码", trigger: "blur"}]
 });
 const loginForm = reactive({
-  username: "",
-  password: ""
+  username: "thisdcw",
+  password: "this201314"
 });
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
 const login = (formEl: FormInstance | undefined) => {
-  // 这里可以添加登录逻辑，比如验证用户
   if (!formEl) return;
-  setToken('1111111'); // 设置 token
-  router.push({
-    path: (route.query.redirect as string) || '/'
-  });
+  // 这里可以添加登录逻辑，比如验证用户
+  UserService.login(loginForm.username, loginForm.password).then((res) => {
+    store.setToken(res.token)
+    ElMessage.success('欢迎回来 ~~~ ' + res.username)
+    router.push({
+      path: (route.query.redirect as string) || '/'
+    });
+  }).catch(err => {
+    console.log(err)
+    ElMessage.error('登录失败')
+  })
+
 };
 </script>
 

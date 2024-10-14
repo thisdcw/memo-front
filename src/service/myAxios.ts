@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
+import {userStore} from "../store";
 
 const myAxios: AxiosInstance = axios.create({
     // baseURL: 'https://thisdcw.cn/api'
@@ -10,8 +11,13 @@ myAxios.defaults.withCredentials = true;
 // 添加请求拦截器
 myAxios.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    // config.headers['Token'] = "37ac921d-a3c3-4317-8583-1a45cafda9ac"; // 设置 Authorization 头
-    console.log("发送请求...")
+    const store = userStore();
+    const token = store.getToken
+    if (token) {
+        config.headers['Token'] = token; // 设置 Authorization 头
+        console.log("发送请求... token: " + token);
+        console.log("请求头:", config.headers);
+    }
     return config;
 }, function (error) {
     // 对请求错误做些什么

@@ -1,3 +1,15 @@
+declare namespace PostForm {
+    type AddDeviceForm = {
+        deviceId: string,
+        deviceName: string,
+    };
+    type UpdateDeviceForm = {
+        deviceId: string;
+        deviceName: string;
+        remark: string;
+        mode: number;
+    }
+}
 declare namespace Model {
     type R<T> = {
         code: number,
@@ -20,6 +32,7 @@ declare namespace Model {
         avatar: string,
         role: number,
         role_id: number,
+        user_status: number,
         account: string,
         token: string
     };

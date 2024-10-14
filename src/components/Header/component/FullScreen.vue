@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex;align-items: center">
-    <el-image :src="imageSrc" style="width: 40px" @click="handleFullScreen"/>
+    <el-image :src="imageSrc" style="width: 30px" @click="handleFullScreen"/>
   </div>
 </template>
 

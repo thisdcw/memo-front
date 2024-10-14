@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {ref, onMounted, onBeforeUnmount} from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const chartRef = ref<HTMLDivElement | null>(null);
 let chartInstance: echarts.ECharts | null = null;
@@ -17,7 +17,8 @@ const data = [
 ];
 
 const initChart = () => {
-  if (chartRef.value) {
+  // 只有在 chartInstance 为 null 时才初始化
+  if (!chartInstance && chartRef.value) {
     chartInstance = echarts.init(chartRef.value);
 
     const option = {
@@ -47,7 +48,7 @@ const initChart = () => {
 
     chartInstance.setOption(option);
 
-    setInterval(() => {
+    const updateChart = () => {
       currentIndex = (currentIndex + 1) % data.length;
       chartInstance?.setOption({
         series: [
@@ -56,7 +57,9 @@ const initChart = () => {
           }
         ]
       });
-    }, 2000); // 每2秒更新数据
+    };
+
+    setInterval(updateChart, 2000); // 每2秒更新数据
   }
 };
 
@@ -68,7 +71,10 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  chartInstance?.dispose();
+  if (chartInstance) {
+    chartInstance.dispose(); // 只有在存在时才处置
+    chartInstance = null; // 重置实例以防止进一步使用
+  }
 });
 </script>
 

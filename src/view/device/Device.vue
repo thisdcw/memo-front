@@ -2,20 +2,22 @@
   <div class="container">
     <div class="top-bar">
       <div class="left-buttons">
-        <el-button type="primary" @click="addDevice" :icon="CirclePlus"
-          >新增设备</el-button
+        <el-button type="primary" @click="showAddDialog = true" :icon="CirclePlus"
+        >新增设备
+        </el-button
         >
         <el-input
-          v-model="search"
-          class="search-input"
-          placeholder="请输入你要搜索的内容"
+            v-model="search"
+            class="search-input"
+            placeholder="请输入你要搜索的内容"
         />
         <el-button
-          type="primary"
-          @click="searchDevice"
-          :icon="Search"
-          style="margin-left: 20px"
-          >搜索</el-button
+            type="primary"
+            @click="searchDevice"
+            :icon="Search"
+            style="margin-left: 20px"
+        >搜索
+        </el-button
         >
       </div>
       <div class="right-buttons">
@@ -28,96 +30,95 @@
       </div>
     </div>
     <el-table
-      :data="deviceList"
-      table-layout="fixed"
-      border
-      height="70vh"
-      @selection-change="handleSelectionChange"
-      class="device-table"
+        :data="deviceList"
+        table-layout="auto"
+        border
+        height="75vh"
+        @selection-change="handleSelectionChange"
+        class="device-table"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column fixed prop="device_id" label="设备Id" align="center" />
-      <el-table-column prop="device_name" label="设备名" align="center" />
+      <el-table-column type="selection"/>
+      <el-table-column fixed prop="device_id" label="设备Id" align="center"/>
+      <el-table-column prop="device_name" label="设备名" align="center"/>
       <el-table-column
-        prop="create_at"
-        label="创建时间"
-        align="center"
-        width="300"
+          prop="create_at"
+          label="创建时间"
+          align="center"
       >
         <template #default="scope">
           <span>{{ formatDate(scope.row.create_at) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="device_status"
-        label="设备状态"
-        align="center"
-        width="120"
+          prop="device_status"
+          label="设备状态"
+          align="center"
       >
         <template #default="scope">
           <el-tag
-            :type="
+              :type="
               scope.row.device_status === 1
                 ? 'success'
                 : scope.row.device_status === 2
                 ? 'info'
                 : 'primary'
             "
-            disable-transitions
-            >{{
+              disable-transitions
+          >{{
               scope.row.device_status == 2
-                ? '离线'
-                : scope.row.device_status == 0
-                ? '未使用'
-                : '在线'
-            }}</el-tag
+                  ? '离线'
+                  : scope.row.device_status == 0
+                      ? '未使用'
+                      : '在线'
+            }}
+          </el-tag
           >
         </template>
       </el-table-column>
-      <el-table-column prop="remark" label="备注" align="center" width="120" />
+      <el-table-column prop="remark" label="备注" align="center" show-overflow-tooltip/>
       <el-table-column
-        prop="isLocked"
-        label="是否锁定"
-        align="center"
-        width="80"
+          prop="isLocked"
+          label="是否锁定"
+          align="center"
       >
         <template v-slot="scope">
           <el-tag
-            :type="scope.row.isLocked === 1 ? 'primary' : 'danger'"
-            disable-transitions
-            >{{ scope.row.isLocked == 1 ? '未锁定' : '已锁定' }}</el-tag
+              :type="scope.row.isLocked === 1 ? 'primary' : 'danger'"
+              disable-transitions
+          >{{ scope.row.isLocked == 1 ? '正常' : '已锁定' }}
+          </el-tag
           >
         </template>
       </el-table-column>
-      <el-table-column prop="isLocked" label="模式" align="center" width="80">
+      <el-table-column prop="isLocked" label="模式" align="center">
         <template v-slot="scope">
           <el-tag type="warning" disable-transitions>{{
-            getModeText(scope.row.mode)
-          }}</el-tag>
+              getModeText(scope.row.mode)
+            }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        prop="last_upload"
-        label="上次上传时间"
-        align="center"
-        width="320"
+          prop="last_upload"
+          label="上次上传时间"
+          align="center"
       >
         <template #default="scope">
           <span>{{ formatDate(scope.row.last_upload) }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        fixed="right"
-        label="操作"
-        align="center"
-        min-width="120"
+          fixed="right"
+          label="操作"
+          align="center"
+          min-width="120"
       >
         <template v-slot="scope">
           <el-button
-            link
-            type="primary"
-            size="small"
-            @click="
+              link
+              type="primary"
+              size="small"
+              @click="
               scope.row.isLocked === 1
                 ? lockDevice(scope.row.device_id)
                 : unlockDevice(scope.row.device_id)
@@ -126,31 +127,31 @@
             <span v-if="scope.row.isLocked === 0">解锁</span>
             <span v-else>锁定</span>
           </el-button>
-          <el-button link type="primary" size="small">修改</el-button>
+          <el-button link type="primary" size="small" @click="openUpdateDialog(scope.row)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination">
       <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :current-page="cur"
-        :page-size="size"
-        @prev-click="prev"
-        @next-click="next"
-        @size-change="pageChange"
-        @current-change="pageChange"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          :current-page="cur"
+          :page-size="size"
+          @prev-click="prev"
+          @next-click="next"
+          @size-change="sizeChange"
+          @current-change="pageChange"
       />
     </div>
   </div>
   <!-- Dialogs -->
   <el-dialog
-    v-model="showLockDialog"
-    title="提示"
-    width="500"
-    draggable
-    overflow
+      v-model="showLockDialog"
+      title="提示"
+      width="500"
+      draggable
+      overflow
   >
     <span>确定锁定{{ lock }}吗</span>
     <template #footer>
@@ -161,28 +162,82 @@
     </template>
   </el-dialog>
   <el-dialog
-    v-model="showUnLockDialog"
-    title="提示"
-    width="500"
-    draggable
-    overflow
+      v-model="showUnLockDialog"
+      title="提示"
+      width="500"
+      draggable
+      overflow
   >
     <span>确定解锁{{ unlock }}吗</span>
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="showUnLockDialog = false">取消</el-button>
         <el-button type="primary" @click="onUnLockConfirm(unlock)"
-          >确定</el-button
+        >确定
+        </el-button
         >
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog
+      v-model="showAddDialog"
+      title="添加设备"
+      width="500"
+      draggable
+      overflow
+  >
+    <div>
+      <el-form-item label="设备号">
+        <el-input v-model="addDeviceForm.deviceId"/>
+      </el-form-item>
+      <el-form-item label="设备名称">
+        <el-input v-model="addDeviceForm.deviceName"/>
+      </el-form-item>
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showAddDialog = false">取消</el-button>
+        <el-button type="primary" @click="addDevice">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <el-dialog
+      v-model="showEditDialog"
+      title="修改设备信息"
+      width="500"
+      draggable
+      overflow
+  >
+    <div>
+      <el-form-item label="设备号">
+        <el-input v-model="updateDeviceForm.deviceId"/>
+      </el-form-item>
+      <el-form-item label="设备名称">
+        <el-input v-model="updateDeviceForm.deviceName"/>
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="updateDeviceForm.remark"/>
+      </el-form-item>
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showEditDialog = false">取消</el-button>
+        <el-button type="primary" @click="updateDevice">
+          确定
+        </el-button>
       </div>
     </template>
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { getAllDevice } from '../../api/device';
-import { formatDate } from '../../utils/date';
-import { CirclePlus, Lock, Search, Unlock } from '@element-plus/icons-vue';
+import {onMounted, reactive, ref, vShow} from 'vue';
+import {DeviceService} from '../../api/device';
+import {formatDate} from '../../utils/date';
+import {CirclePlus, Lock, Search, Unlock} from '@element-plus/icons-vue';
+import Device = Model.Device;
+import {ElMessage} from "element-plus";
 
 onMounted(() => {
   getDeviceList();
@@ -190,6 +245,7 @@ onMounted(() => {
 
 const deviceList = ref<Model.Device[]>([]);
 const selectList = ref<Model.Device[]>([]);
+
 const cur = ref(1);
 const size = ref(10);
 const total = ref(0);
@@ -198,6 +254,8 @@ const lock = ref('');
 const showLockDialog = ref(false);
 const unlock = ref('');
 const showUnLockDialog = ref(false);
+const showAddDialog = ref(false);
+const showEditDialog = ref(false);
 
 const getModeText = (mode: number) => {
   switch (mode) {
@@ -224,41 +282,98 @@ const getModeText = (mode: number) => {
   }
 };
 
+const addDeviceForm = reactive({
+  deviceId: '',
+  deviceName: '',
+} as PostForm.AddDeviceForm)
+
+const updateDeviceForm = reactive({
+  deviceId: '',
+  deviceName: '',
+  remark: '',
+  mode: 0
+} as PostForm.UpdateDeviceForm)
+
+const openUpdateDialog = (device: Device) => {
+  updateDeviceForm.deviceId = device.device_id;
+  updateDeviceForm.deviceName = device.device_name;
+  updateDeviceForm.remark = device.remark;
+  updateDeviceForm.mode = device.mode;
+  showEditDialog.value = true;
+}
+
+const updateDevice = () => {
+  DeviceService.updateDevice(updateDeviceForm).then(res => {
+    ElMessage.success('更新成功')
+    getDeviceList();
+  }).catch(err => {
+    ElMessage.error('更新失败')
+  })
+  showEditDialog.value = false;
+}
+
 const onLockConfirm = (deviceId: string) => {
   showLockDialog.value = false;
-  console.log('锁定设备：', deviceId);
+  DeviceService.lockDevice(deviceId).then(res => {
+    ElMessage.success('锁定成功')
+    getDeviceList()
+  }).catch(err => {
+    ElMessage.error('锁定失败')
+  })
 };
 
 const onUnLockConfirm = (deviceId: string) => {
   showUnLockDialog.value = false;
-  console.log('解锁设备：', deviceId);
+  DeviceService.unlockDevice(deviceId).then(res => {
+    ElMessage.success('解锁成功')
+    getDeviceList()
+  }).catch(err => {
+    ElMessage.error('解锁失败')
+  })
 };
 
 const searchDevice = () => {
   console.log('搜索设备：', search.value);
+  getDeviceList()
 };
 const addDevice = () => {
-  console.log('添加设备');
+  DeviceService.addNewDevice(addDeviceForm).then(res => {
+    ElMessage.success('添加成功')
+    getDeviceList()
+  }).catch(err => {
+    ElMessage.error('添加失败')
+  })
+  showAddDialog.value = false;
 };
 const getDeviceList = () => {
-  getAllDevice(cur.value, size.value)
-    .then((res) => {
-      console.log(res.records);
-      deviceList.value = res.records;
-      total.value = res.total;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  DeviceService.getAllDevice(cur.value, size.value, search.value)
+      .then((res) => {
+        console.log(res.records);
+        deviceList.value = res.records;
+        total.value = res.total;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 };
 const handleSelectionChange = (val: Model.Device[]) => {
   selectList.value = val;
 };
 const batchLock = () => {
-  console.log('批量锁定');
+  DeviceService.lockAllDevice().then(res => {
+    ElMessage.success('批量锁定成功');
+    getDeviceList();
+  }).catch(err => {
+    ElMessage.error('批量锁定失败');
+  })
 };
 const batchUnLock = () => {
-  console.log('批量解锁');
+  DeviceService.unlockAllDevice().then(res => {
+    ElMessage.success('批量解锁成功');
+    getDeviceList();
+  }).catch(err => {
+    ElMessage.error('批量解锁失败');
+  })
 };
 const prev = (page: number) => {
   console.log('当前页码：', page);
@@ -267,6 +382,11 @@ const prev = (page: number) => {
 const next = (page: number) => {
   console.log('页码：', page);
   cur.value = page + 1;
+};
+const sizeChange = (val: number) => {
+  console.log('每页显示条数：', val);
+  size.value = val;
+  getDeviceList();
 };
 
 const pageChange = (currentPage: number, pageSize: number) => {
@@ -317,7 +437,6 @@ const unlockDevice = (deviceId: string) => {
 }
 
 .device-table {
-  width: 100%;
   overflow: hidden;
   margin-top: 40px;
 }
