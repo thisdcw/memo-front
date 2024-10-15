@@ -13,9 +13,10 @@ const fetchUserInfo = () => {
     store.setUser(data)
     ElMessage.success('获取用户信息成功')
   }).catch(err => {
-    ElMessage.error('获取用户失败,请重新登录')
     store.clearUser()
+    localStorage.removeItem('token');
     router.replace('/login')
+    ElMessage.error('获取用户失败,请重新登录')
   })
 }
 

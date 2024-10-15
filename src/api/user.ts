@@ -19,7 +19,10 @@ export namespace UserService {
     }
 
     export const login = async (account: string, password: string): Promise<Model.User> => {
-        const res = await myAxios.post('/user/shiro/login?account=' + account + '&password=' + password)
+        const res = await myAxios.post('/user/login', {
+            account,
+            password
+        })
         if (res) {
             return res.data;
         }

@@ -1,6 +1,5 @@
 import {Router} from "vue-router";
 import NProgress from "../plugins/NProgress";
-import {userStore} from "../store";
 
 
 const whiteList = ['/login', '/register']
@@ -8,8 +7,7 @@ const whiteList = ['/login', '/register']
 export function setupRouterGuard(router: Router) {
     router.beforeEach(async (to, _, next) => {
         NProgress.start();
-        const store = userStore();
-        const token = store.getToken;
+        const token = localStorage.getItem('token');
         if (token) {
             if (to.path === '/login') {
                 next({path: '/'})

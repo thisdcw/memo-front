@@ -9,6 +9,7 @@ const store = userStore();
 const router = useRouter(); // 获取路由实例
 const logout = () => {
   store.clearUser();
+  localStorage.removeItem("token")
   router.replace({path: '/login'});
 }
 </script>

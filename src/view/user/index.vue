@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { formatDate } from '@/utils/date';
-import { onMounted, ref } from 'vue';
-import { Search } from '@element-plus/icons-vue';
-import { UserService } from '@/api/user';
-import { ElMessage } from 'element-plus';
-import { getUserList } from '@/mock/data/user';
+import {formatDate} from '@/utils/date';
+import {onMounted, ref} from 'vue';
+import {Search} from '@element-plus/icons-vue';
+import {UserService} from '@/api/user';
+import {ElMessage} from 'element-plus';
+import {getUserList} from '@/mock/data/user';
 
 const url =
-  'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
+    'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
 
 const cur = ref(1);
 const size = ref(10);
@@ -41,22 +41,25 @@ const pageChange = (currentPage: number, pageSize: number) => {
   fetchAllUsers();
 };
 
-const tableData = getUserList();
+const tableData = ref([] as Model.User[])
 
 const fetchAllUsers = () => {
   UserService.getAllUser(cur.value, size.value, search.value)
-    .then((res) => {
-      console.log(res);
-      // tableData.value = res.records;
-      ElMessage.success('获取所有用户成功');
-    })
-    .catch((err) => {
-      ElMessage.success('获取所有用户失败');
-    });
+      .then((res) => {
+        console.log(res);
+        tableData.value = res.records;
+        total.value = res.total;
+        cur.value = res.current;
+        size.value = res.size;
+        ElMessage.success('获取所有用户成功');
+      })
+      .catch((err) => {
+        ElMessage.error('获取所有用户失败');
+      });
 };
 
 onMounted(() => {
-  // fetchAllUsers();
+  fetchAllUsers();
 });
 </script>
 
@@ -66,9 +69,9 @@ onMounted(() => {
       <div class="left-buttons">
         <!--        <el-button type="primary" :icon="CirclePlus">新增用户</el-button>-->
         <el-input
-          class="search-input"
-          placeholder="请输入你要搜索的用户账户或用户名"
-          v-model="search"
+            class="search-input"
+            placeholder="请输入你要搜索的用户账户或用户名"
+            v-model="search"
         />
         <el-button type="primary" class="search-button" :icon="Search">
           搜索
@@ -80,27 +83,28 @@ onMounted(() => {
     </div>
     <div>
       <el-table
-        :data="tableData"
-        class="table"
-        height="75vh"
-        table-layout="auto"
-        border
+          :data="tableData"
+          class="table"
+          height="75vh"
+          table-layout="auto"
+          border
       >
-        <el-table-column fixed type="selection" />
-        <el-table-column prop="account" align="center" label="账号" />
+        <el-table-column fixed type="selection"/>
+        <el-table-column prop="account" align="center" label="账号">
+        </el-table-column>
         <el-table-column fixed prop="avatar" align="center" label="头像">
           <template #default="scope">
             <el-image
-              style="width: 40px; height: 40px"
-              :src="scope.row.avatar ?? url"
-              fit="cover"
-              @error="scope.row.avatar = url"
+                style="width: 40px; height: 40px"
+                :src="scope.row.avatar ?? url"
+                fit="cover"
+                @error="scope.row.avatar = url"
             />
           </template>
         </el-table-column>
 
-        <el-table-column prop="username" align="center" label="用户名" />
-        <el-table-column prop="email" align="center" label="邮箱" />
+        <el-table-column prop="username" align="center" label="用户名"/>
+        <el-table-column prop="email" align="center" label="邮箱"/>
         <el-table-column prop="create_at" align="center" label="创建时间">
           <template #default="scope">
             <span>{{ formatDate(scope.row.create_at) }}</span>
@@ -111,15 +115,20 @@ onMounted(() => {
             <span>{{ scope.row.role === 1 ? '管理员' : '用户' }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="user_status" align="center" label="用户状态" width="90">
+          <template #default="scope">
+            <span>{{ scope.row.user_status }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
-          fixed="right"
-          align="center"
-          label="操作"
-          min-width="120"
+            fixed="right"
+            align="center"
+            label="操作"
+            min-width="120"
         >
           <template #default>
-            <el-button link type="primary" size="small" @click="handleClick">
-              删除
+            <el-button link type="primary" size="small">
+              详情
             </el-button>
             <el-button link type="primary" size="small">编辑</el-button>
           </template>
@@ -128,15 +137,15 @@ onMounted(() => {
     </div>
     <div class="pagination">
       <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        :current-page="cur"
-        :page-size="size"
-        @prev-click="prev"
-        @next-click="next"
-        @size-change="sizeChange"
-        @current-change="pageChange"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          :current-page="cur"
+          :page-size="size"
+          @prev-click="prev"
+          @next-click="next"
+          @size-change="sizeChange"
+          @current-change="pageChange"
       />
     </div>
   </div>
