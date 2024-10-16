@@ -29,11 +29,7 @@ export namespace DeviceService {
     }
 
     export const unlockDevice = async (deviceId: string): Promise<string> => {
-        const res = await myAxios.post('/device/unlock', {
-            params: {
-                deviceId,
-            }
-        });
+        const res = await myAxios.post('/device/unlock?deviceId=' + deviceId);
         if (res) {
             return res.data;
         }

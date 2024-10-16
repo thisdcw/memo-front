@@ -19,8 +19,8 @@ const loginRules = reactive({
   password: [{required: true, message: '请输入密码', trigger: 'blur'}]
 });
 const loginForm = reactive({
-  username: 'thisdcw',
-  password: 'this201314'
+  username: '',
+  password: ''
 });
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
