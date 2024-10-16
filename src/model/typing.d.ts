@@ -24,6 +24,36 @@ declare namespace Model {
         pages: number,
         records: T[]
     };
+    type CurrentUser = {
+        uid: number,
+        username: string,
+        email: string,
+        create_at: string,
+        avatar: string,
+        user_status: number,
+        account: string,
+        token: string,
+        address: string,
+        phone: string,
+        city: string,
+        roleName: string,
+        permissions: string[],
+        roadVOList: Road[],
+        skillsList: Skill[],
+        frameworkList: Skill[]
+    };
+    type Road = {
+        id: number,
+        date_at: String,
+        title: string,
+        description: string
+    };
+    type Skill = {
+        id: number,
+        name: string,
+        level: number,
+        score: number,
+    };
     type User = {
         uid: number,
         username: string,

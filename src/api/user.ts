@@ -29,13 +29,13 @@ export namespace UserService {
         return {} as Model.User;
     }
 
-    export const getCurrentUser = async (): Promise<Model.User> => {
+    export const getCurrentUser = async (): Promise<Model.CurrentUser> => {
 
         const res = await myAxios.get('/user/current');
         if (res) {
             return res.data
         }
-        return {} as Model.User;
+        return {} as Model.CurrentUser;
     }
 }
 
