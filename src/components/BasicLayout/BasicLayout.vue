@@ -75,9 +75,9 @@ onMounted(() => {
   }
 }
 
-.el-aside-transition {
-  transition: width 0.3s ease; /* 调整时间和效果 */
-}
+// .el-aside-transition {
+//   transition: width 0.3s ease; /* 调整时间和效果 */
+// }
 
 .el-main {
   background-color: #EFF0F2;

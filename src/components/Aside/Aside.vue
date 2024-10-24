@@ -1,49 +1,60 @@
 <template>
-  <div style="height: 100vh;">
-    <el-menu :collapse-transition="false"
-             :default-active="defaultActive"
-             :collapse="isCollapsed"
-             :unique-opened="true"
-             router
-             class="el-menu-vertical-demo">
-      <div style="display: flex;justify-content: center;align-items: center;height: 60px;">
-        <!--        <span style="font-weight: bolder;font-size: 16px">{{ isCollapsed ? 'memo' : 'memo' }}</span>-->
+  <div style="height: 100vh">
+    <el-menu
+      :collapse-transition="false"
+      :default-active="defaultActive"
+      :collapse="isCollapsed"
+      :unique-opened="true"
+      router
+      class="el-menu-vertical-demo"
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 60px;
+        "
+      >
+        <span style="font-weight: bolder; font-size: 16px">{{
+          isCollapsed ? 'memo' : 'memo后台'
+        }}</span>
       </div>
       <el-menu-item index="/welcome">
         <el-icon>
-          <House/>
+          <House />
         </el-icon>
         <template #title>首页</template>
       </el-menu-item>
       <el-menu-item index="/dashboard">
         <el-icon>
-          <DataAnalysis/>
+          <DataAnalysis />
         </el-icon>
         <template #title>数据看板</template>
       </el-menu-item>
       <el-sub-menu index="/1">
         <template #title>
           <el-icon>
-            <Star/>
+            <Star />
           </el-icon>
           <span>管理模块</span>
         </template>
         <el-menu-item-group>
           <el-menu-item index="/user">
             <el-icon>
-              <User/>
+              <User />
             </el-icon>
             <span> 用户管理</span>
           </el-menu-item>
           <el-menu-item index="/device">
             <el-icon>
-              <Operation/>
+              <Operation />
             </el-icon>
             <span>设备管理</span>
           </el-menu-item>
           <el-menu-item index="/oss">
             <el-icon>
-              <Document/>
+              <Document />
             </el-icon>
             <span>文件管理</span>
           </el-menu-item>
@@ -51,13 +62,13 @@
       </el-sub-menu>
       <el-menu-item index="/other">
         <el-icon>
-          <Collection/>
+          <Collection />
         </el-icon>
         <template #title>其他功能</template>
       </el-menu-item>
       <el-menu-item index="/profile">
         <el-icon>
-          <Setting/>
+          <Setting />
         </el-icon>
         <template #title>个人中心</template>
       </el-menu-item>
@@ -70,34 +81,35 @@ import {
   Collection,
   DataAnalysis,
   Document,
-  Expand, Fold,
+  Expand,
+  Fold,
   House,
   Operation,
   Setting,
   Star,
   User
-} from "@element-plus/icons-vue";
-import {ref, watch} from "vue";
-import {useRoute} from 'vue-router'
-import router from "@/router";
-import {eventBus} from "@/store/event/eventBus";
+} from '@element-plus/icons-vue';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import router from '@/router';
+import { eventBus } from '@/store/event/eventBus';
 
-const myRoutes = router.getRoutes()
-console.log("所有路由", myRoutes)
-const route = useRoute()
-const isCollapsed = ref(false)
-const defaultActive = ref(route.path ?? '/')
+const myRoutes = router.getRoutes();
+console.log('所有路由', myRoutes);
+const route = useRoute();
+const isCollapsed = ref(false);
+const defaultActive = ref(route.path ?? '/');
 
 eventBus.on('collapse-changed', (isCollapse: boolean) => {
   console.log('菜单折叠状态:', isCollapse);
   isCollapsed.value = isCollapse;
 });
 watch(
-    () => route.path,
-    (newPath) => {
-      defaultActive.value = newPath
-    }
-)
+  () => route.path,
+  (newPath) => {
+    defaultActive.value = newPath;
+  }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -110,15 +122,13 @@ watch(
 }
 
 :deep(.el-menu) {
-
   width: 100%;
   overflow-x: hidden;
-  border-right: none;
 }
 
 // 覆盖激活样式
 :deep(.el-menu-item.is-active) {
-  background-color: #409EFF !important; // 激活背景色
+  background-color: #409eff !important; // 激活背景色
   color: #fff !important; // 激活字体颜色
 }
 
@@ -149,5 +159,4 @@ watch(
     border-radius: 2px; // 可选，为长条加上圆角
   }
 }
-
 </style>
