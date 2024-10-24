@@ -46,5 +46,13 @@ declare namespace Model {
         remark?: string,
         mode?: number,
         isLocked: number
+    };
+    type FileInfo = {
+        key: string,
+        hash: string,
+        size: number,
+        putTime: string,
+        mimeType: string,
+        status: number
     }
 }

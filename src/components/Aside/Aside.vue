@@ -1,16 +1,13 @@
 <template>
   <div style="height: 100vh;">
-    <el-menu :default-active="defaultActive" :collapse="isCollapse" class="el-menu-vertical-demo" router>
-      <!--      <div @click="isCollapse = !isCollapse">-->
-      <!--        <div v-if="isCollapse" style="width:63px ">-->
-      <!--          <Expand style="height: 20px;"/>-->
-      <!--        </div>-->
-      <!--        <div v-if="!isCollapse" style="width: 100%;display: flex;justify-content: flex-end;">-->
-      <!--          <Fold style="height: 20px;margin-right: 15px"/>-->
-      <!--        </div>-->
-      <!--      </div>-->
+    <el-menu :collapse-transition="false"
+             :default-active="defaultActive"
+             :collapse="isCollapsed"
+             :unique-opened="true"
+             router
+             class="el-menu-vertical-demo">
       <div style="display: flex;justify-content: center;align-items: center;height: 60px;">
-        <span style="font-weight: bolder;font-size: 16px">memo管理系统</span>
+        <!--        <span style="font-weight: bolder;font-size: 16px">{{ isCollapsed ? 'memo' : 'memo' }}</span>-->
       </div>
       <el-menu-item index="/welcome">
         <el-icon>
@@ -44,6 +41,12 @@
             </el-icon>
             <span>设备管理</span>
           </el-menu-item>
+          <el-menu-item index="/oss">
+            <el-icon>
+              <Document/>
+            </el-icon>
+            <span>文件管理</span>
+          </el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
       <el-menu-item index="/other">
@@ -63,15 +66,32 @@
 </template>
 
 <script lang="ts" setup>
-import {Collection, DataAnalysis, House, Operation, Setting, Star, User} from "@element-plus/icons-vue";
+import {
+  Collection,
+  DataAnalysis,
+  Document,
+  Expand, Fold,
+  House,
+  Operation,
+  Setting,
+  Star,
+  User
+} from "@element-plus/icons-vue";
 import {ref, watch} from "vue";
 import {useRoute} from 'vue-router'
+import router from "@/router";
+import {eventBus} from "@/store/event/eventBus";
 
+const myRoutes = router.getRoutes()
+console.log("所有路由", myRoutes)
 const route = useRoute()
-const isCollapse = ref(false)
+const isCollapsed = ref(false)
 const defaultActive = ref(route.path ?? '/')
 
-// 监听路由变化
+eventBus.on('collapse-changed', (isCollapse: boolean) => {
+  console.log('菜单折叠状态:', isCollapse);
+  isCollapsed.value = isCollapse;
+});
 watch(
     () => route.path,
     (newPath) => {
@@ -81,8 +101,19 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  height: 100vh;
+.el-menu-vertical-demo {
+  height: calc(100vh);
+}
+
+:deep(.el-menu--collapse-transition) {
+  transition: width 0.3s ease !important; // 更短的动画时间
+}
+
+:deep(.el-menu) {
+
+  width: 100%;
+  overflow-x: hidden;
+  border-right: none;
 }
 
 // 覆盖激活样式
@@ -101,6 +132,7 @@ watch(
   background-color: #c2ddfa !important; // 鼠标悬浮背景色
   color: white;
 }
+
 :deep(.el-menu-item.is-active) {
   background-color: #4ea1fa !important; // 激活背景色
   color: #fff !important; // 激活字体颜色

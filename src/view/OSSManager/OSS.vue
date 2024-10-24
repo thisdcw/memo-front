@@ -2,9 +2,8 @@
 import {formatDate} from '@/utils/date';
 import {onMounted, ref} from 'vue';
 import {Search} from '@element-plus/icons-vue';
-import {UserService} from '@/api/user';
 import {ElMessage} from 'element-plus';
-import {getUserList} from '@/mock/data/user';
+import {OSSService} from "@/api/oss";
 
 const url =
     'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
@@ -31,35 +30,33 @@ const next = (page: number) => {
 const sizeChange = (val: number) => {
   console.log('每页显示条数：', val);
   size.value = val;
-  fetchAllUsers();
+  fetchAllFiles();
 };
 
 const pageChange = (currentPage: number, pageSize: number) => {
   console.log('当前页码：', currentPage);
   console.log('每页显示条数：', pageSize);
   cur.value = currentPage;
-  fetchAllUsers();
+  fetchAllFiles();
 };
 
-const tableData = ref([] as Model.User[])
+const tableData = ref([] as Model.FileInfo[])
 
-const fetchAllUsers = () => {
-  UserService.getAllUser(cur.value, size.value, search.value)
+const fetchAllFiles = () => {
+  OSSService.getFileList("images")
       .then((res) => {
         console.log(res);
-        tableData.value = res.records;
-        total.value = res.total;
-        cur.value = res.current;
-        size.value = res.size;
-        ElMessage.success('获取所有用户成功');
+        tableData.value = res;
+        total.value = res.length;
+        ElMessage.success('获取所有文件成功');
       })
       .catch((err) => {
-        ElMessage.error('获取所有用户失败');
+        ElMessage.error('获取所有文件失败');
       });
 };
 
 onMounted(() => {
-  fetchAllUsers();
+  fetchAllFiles();
 });
 </script>
 
@@ -90,34 +87,41 @@ onMounted(() => {
           border
       >
         <el-table-column fixed type="selection"/>
-        <el-table-column prop="account" align="center" label="账号">
-        </el-table-column>
-        <el-table-column fixed prop="avatar" align="center" label="头像">
+        <el-table-column fixed prop="key" align="center" label="文件名">
           <template #default="scope">
-            <el-image
-                style="width: 40px; height: 40px"
-                :src="scope.row.avatar ?? url"
-                fit="cover"
-                @error="scope.row.avatar = url"
-            />
+            <span>{{ scope.row.key.split("/")[1] ?? scope.row.key.split("/")[0] }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="hash" align="center" label="hash值">
+          <template #default="scope">
+            <span>{{ scope.row.hash }}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column prop="username" align="center" label="用户名"/>
-        <el-table-column prop="email" align="center" label="邮箱"/>
+
+        <el-table-column prop="size" align="center" label="大小">
+          <template #default="scope">
+            <span>{{ parseFloat((scope.row.size / 1024).toFixed(3)) }} MB</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="create_at" align="center" label="创建时间">
           <template #default="scope">
-            <span>{{ formatDate(scope.row.create_at) }}</span>
+            <span>{{ scope.row.putTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="role" align="center" label="角色" width="90">
+        <el-table-column prop="role" align="center" label="类型" width="90">
           <template #default="scope">
-            <span>{{ scope.row.role === 1 ? '管理员' : '用户' }}</span>
+            <span>{{ scope.row.mimeType }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="user_status" align="center" label="用户状态" width="90">
+        <el-table-column prop="user_status" align="center" label="文件状态" width="90">
           <template #default="scope">
-            <span>{{ scope.row.user_status }}</span>
+            <el-tag
+                :type="scope.row.status === 0 ? 'primary' : 'danger'"
+                disable-transitions
+            >{{ scope.row.status == 0 ? '正常' : '已禁用' }}
+            </el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -127,10 +131,8 @@ onMounted(() => {
             min-width="120"
         >
           <template #default>
-            <el-button link type="primary" size="small">
-              详情
-            </el-button>
             <el-button link type="primary" size="small">编辑</el-button>
+            <el-button link type="primary" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

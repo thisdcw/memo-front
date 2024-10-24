@@ -412,8 +412,7 @@ const unlockDevice = (deviceId: string) => {
   display: flex;
   flex-direction: column;
   padding: 1%;
-  height: 98%;
-  width: 98%;
+  flex: 1;
   background-color: white;
 }
 

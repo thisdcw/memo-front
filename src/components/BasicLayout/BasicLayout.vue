@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {UserService} from "@/api/user";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 import {userStore} from "@/store";
+import {eventBus} from "@/store/event/eventBus";
 
 const router = useRouter();
 const store = userStore();
+const asideIsCollapse = ref(false);
 
 const fetchUserInfo = () => {
   UserService.getCurrentUser().then(data => {
@@ -19,7 +21,9 @@ const fetchUserInfo = () => {
     ElMessage.error('获取用户失败,请重新登录')
   })
 }
-
+eventBus.on('collapse-changed', (isCollapse: boolean) => {
+  asideIsCollapse.value = isCollapse;
+});
 onMounted(() => {
   fetchUserInfo()
 })
@@ -30,11 +34,15 @@ onMounted(() => {
     <el-watermark :content="['']" style="flex: 1; display: flex;">
       <el-container>
         <!--侧边栏-->
-        <el-aside style="width: 12%; min-width: 150px;">
-          <cs-aside/>
+        <el-aside>
+          <div class="aside-box" :style="{ width: asideIsCollapse ? '65px' : '210px' }">
+            <el-scrollbar>
+              <cs-aside/>
+            </el-scrollbar>
+          </div>
         </el-aside>
         <!--主要内容-->
-        <el-container style="width: 88%; height: 100%;">
+        <el-container style=" height: 100%;">
           <el-header>
             <cs-header/>
           </el-header>
@@ -51,6 +59,26 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.el-container {
+  :deep(.el-aside) {
+    width: auto;
+    background-color: var(--el-menu-bg-color);
+    border-right: 1px solid var(--el-aside-border-color);
+
+    .aside-box {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: width 0.3s ease;
+
+    }
+  }
+}
+
+.el-aside-transition {
+  transition: width 0.3s ease; /* 调整时间和效果 */
+}
+
 .el-main {
   background-color: #EFF0F2;
   margin: 0;
@@ -67,18 +95,12 @@ onMounted(() => {
 .common-layout {
   display: flex;
   flex: 1;
-  width: 100%;
   height: 100%;
 }
 
 @media (max-width: 768px) {
   .common-layout {
     flex-direction: column;
-
-    .el-aside {
-      width: 100%;
-      min-width: auto;
-    }
 
     .el-main {
       padding: 4px;

@@ -7,6 +7,7 @@ import Profile from '@/view/profile/index.vue';
 import Other from '@/view/other/index.vue';
 import Dashboard from '@/view/dashboard/index.vue';
 import Welcome from '@/view/welcome/index.vue';
+import OSS from '@/view/OSSManager/OSS.vue';
 import BasicLayout from "../components/BasicLayout/BasicLayout.vue";
 import {setupRouterGuard} from './guard'
 
@@ -18,6 +19,7 @@ const routes = [
             {path: '/dashboard', component: Dashboard},
             {path: '/user', component: User},
             {path: '/device', component: Device},
+            {path: '/oss', component: OSS},
             {path: '/other', component: Other},
             {path: '/profile', component: Profile},
         ]

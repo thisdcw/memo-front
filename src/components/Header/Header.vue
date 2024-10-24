@@ -9,6 +9,8 @@
 
 import Left from "@/components/Header/component/Left.vue";
 import Right from "@/components/Header/component/Right.vue";
+
+
 </script>
 
 <style lang="scss" scoped>

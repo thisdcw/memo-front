@@ -1,6 +1,6 @@
-import { createPinia } from 'pinia'
-import { userStore } from './user'
+import {createPinia} from 'pinia'
+import {userStore} from './user'
 
 const pinia = createPinia()
 
-export { pinia, userStore }
+export {pinia, userStore}
